@@ -61,6 +61,8 @@ lvm_logvol - Create a LVM logical volume
   Parameters:
     volgroup - name of a volume group created with 'lvm_volgroup'
     size     - size of logical volume to pass to 'lvcreate'
+               Supports both static and dynamic sizes.
+               Examples: 100G, 100%FREE
     name     - name of logical volume to pass to 'lvcreate'
 
 
