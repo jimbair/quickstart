@@ -65,10 +65,11 @@ setup_lvm() {
     local volgroup="$(echo ${logvol} | cut -d '|' -f1)"
     local size="$(echo ${logvol} | cut -d '|' -f2)"
     local name="$(echo ${logvol} | cut -d '|' -f3)"
+    local volgroup_msg="could not create logical volume '${name}' with size ${size} in volume group '${volgroup}'"
     if [ -n "$(echo ${size} | grep '%')" ]; then
-      spawn "lvcreate -l ${size} -n${name} ${volgroup}" || die "could not create logical volume '${name}' with size ${size} in volume group '${volgroup}'"
+      spawn "lvcreate -l ${size} -n${name} ${volgroup}" || die "${volgroup_msg}"
     else
-      spawn "lvcreate -L${size} -n${name} ${volgroup}" || die "could not create logical volume '${name}' with size ${size} in volume group '${volgroup}'"
+      spawn "lvcreate -L${size} -n${name} ${volgroup}" || die "${volgroup_msg}"
     fi
   done
 }
