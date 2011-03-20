@@ -4,4 +4,15 @@ Originally written by Andrew Gaffney
 All Credits go to him here:
 http://agaffney.org/quickstart.php
 
-Forked here on github so I could implement my patches in an open forum. If Andrew would rather I took this down, I will. =)
+Forked here on github so I could implement my patches in an open forum thanks to GPLv2 (/doc/README).
+
+-----
+
+Fixes/features thus far that are not upstream:
+
+Features:
+-Support for percentages when creating logical volumes (100%FREE)
+
+Fixes:
+-Builds kernel/initrd and sets up grub after all packages installed. Current upstream builds
+ packages after the initrd, causing lvm2 utils to be missing/system cannot boot.
