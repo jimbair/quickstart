@@ -4,7 +4,7 @@
 stage_uri https://gentoo.osuosl.org/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-20181225T214502Z.tar.xz
 tree_type snapshot https://gentoo.osuosl.org/releases/snapshots/current/portage-latest.tar.xz
 rootpw ChangeMe123
-bootloader grub
+bootloader grub2
 
 part sda 1 83 100M
 part sda 2 82 512M
