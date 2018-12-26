@@ -7,6 +7,7 @@ stage_uri https://tsue.net/stage3-amd64-20181225T214502Z.tar.xz
 tree_type snapshot https://tsue.net/portage-latest.tar.xz
 rootpw ChangeMe123
 bootloader grub2
+grub2_install /dev/sda
 
 part sda 1 83 100M
 part sda 2 82 512M
