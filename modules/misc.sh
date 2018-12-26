@@ -50,3 +50,16 @@ unpack_tarball() {
   return $?
 }
 
+check_chroot_fstab() {
+    local mountpoint=$1
+    # INFO make sure /boot is writeable or grub2-install in configure_bootloader() will fail with
+    #       grub2-install failed to get canonical path /boot/grub
+    if [ "$mountpoint" == '/boot' ]; then
+        mount -o rw,remount $(grep ${mountpoint} ${chroot_dir}/etc/fstab | awk '{ print $1; }')
+    fi
+    if [ "$(grep ${mountpoint} ${chroot_dir}/etc/fstab | awk '{ print $2; }')" == "${mountpoint}" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
