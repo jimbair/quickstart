@@ -1,7 +1,7 @@
 # $Id$
 
 # I really want $stage_uri to have a /current/stage3-amd64-latest.tar.xz but they don't do that anymore
-stage_uri http://distfiles.gentoo.org/releases/amd64/autobuilds/20181225T214502Z/stage3-amd64-20181225T214502Z.tar.xz
+stage_uri https://distfiles.gentoo.org/releases/amd64/autobuilds/20181225T214502Z/stage3-amd64-20181225T214502Z.tar.xz
 tree_type snapshot https://gentoo.osuosl.org/releases/snapshots/current/portage-latest.tar.xz
 rootpw ChangeMe123
 bootloader grub
