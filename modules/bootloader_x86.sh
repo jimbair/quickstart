@@ -48,3 +48,37 @@ configure_bootloader_grub() {
   fi
 }
 
+configure_bootloader_grub2() {
+    debug configure_bootloader_grub2 "configuring and deploying grub2"
+
+    check_chroot_fstab /boot && spawn_chroot "[ -z \"\$(mount | grep /boot)\" ] && mount /boot"            
+
+    [ -z "${!grub2_install[@]}" ] && warn "looks like it's pulling grub:2 but 'grub2_install' is not set... is it intended?"
+    for device in "${!grub2_install[@]}"; do
+        # FIXME only accepts a single option currently (--modules=)        
+        local key=$(echo ${grub2_install["${device}"]} | cut -d'=' -f1)
+        local value=$(echo ${grub2_install["${device}"]} | cut -d'=' -f2)
+    
+        if [ -n "${key}" ] && [ -n "${value}" ]; then 
+            debug configure_bootloader_grub2 "deploying grub2-install $key=$value /dev/${device}"
+            spawn_chroot "grub-install ${key}=${value} /dev/${device}" || die "Could not deploy grub2-install $key=$value /dev/${device}"
+        else
+            debug configure_bootloader_grub2 "deploying grub2-install /dev/${device}"
+            spawn_chroot "grub-install /dev/${device}" || die "Could not deploy grub2-install /dev/${device}"
+        fi
+        #spawn_chroot "grub2-install --modules=\"part_gpt mdraid1x lvm xfs\" /dev/sda" || die "Could not deploy with grub2-install on /dev/sda"
+        #spawn_chroot "grub2-install --modules=\"part_gpt mdraid1x lvm xfs\" /dev/sdb" || die "Could not deploy with grub2-install on /dev/sdb"
+    done
+    
+    if [ -n "${bootloader_kernel_args}" ]; then
+        local args=$(echo ${bootloader_kernel_args} | \
+        sed -e 's:{{root_keydev_uuid}}:$(get_uuid ${luks_remdev}):' | \
+        sed -e 's:{{root_key}}:${luks_key}:')
+        debug configure_bootloader_grub2 "GRUB_CMDLINE_LINUX=$(echo ${args}) to /etc/default/grub"
+	spawn "cp -f ${chroot_dir}/etc/default/grub ${chroot_dir}/etc/default/grub.example" || die "Could not copy ${chroot_dir}/etc/default/grub to ${chroot_dir}/etc/default/grub.example"
+	spawn "cat ${chroot_dir}/etc/default/grub.example | grep -v ^#.* > ${chroot_dir}/etc/default/grub" || die "Could not filter comments out from ${chroot_dir}/etc/default/grub"
+	spawn "echo -e '\n\nGRUB_CMDLINE_LINUX=\"\$GRUB_CMDLINE_LINUX ${args}\"' >> ${chroot_dir}/etc/default/grub" || die "Could not add dolvm option to ${chroot_dir}/etc/default/grub"
+    fi
+    debug configure_grub2 "generating /boot/grub/grub.cfg"
+    spawn_chroot "grub-mkconfig -o /boot/grub/grub.cfg" || die "Could not generate /boot/grub/grub.cfg"
+}
