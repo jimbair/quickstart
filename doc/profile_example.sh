@@ -1,33 +1,31 @@
 # $Id$
 
-stage_uri http://192.168.0.12/gentoo/stage3-i686-2006.1.tar.bz2
-tree_type snapshot http://192.168.0.12/gentoo/portage-20061216.tar.bz2
-rootpw password
+# I really want $stage_uri to have a /current/stage3-amd64-latest.tar.xz but they don't do that anymore
+stage_uri http://distfiles.gentoo.org/releases/amd64/autobuilds/20181225T214502Z/stage3-amd64-20181225T214502Z.tar.xz
+tree_type snapshot https://gentoo.osuosl.org/releases/snapshots/current/portage-latest.tar.xz
+rootpw ChangeMe123
 bootloader grub
 
-part hda 1 83 100M
-part hda 2 82 512M
-part hda 3 83 +
+part sda 1 83 100M
+part sda 2 82 512M
+part sda 3 83 +
 
-format /dev/hda1 ext2
-format /dev/hda2 swap
-format /dev/hda3 ext3
+format /dev/sda1 ext2
+format /dev/sda2 swap
+format /dev/sda3 ext3
 
-mountfs /dev/hda1 ext2 /boot
-mountfs /dev/hda2 swap
-mountfs /dev/hda3 ext3 / noatime
+mountfs /dev/sda1 ext2 /boot
+mountfs /dev/sda2 swap
+mountfs /dev/sda3 ext3 / noatime
 
 net eth0 dhcp
 
-#netmount 192.168.0.12:/usr/portage nfs /usr/portage ro
-
 post_install_portage_tree() {
   cat > ${chroot_dir}/etc/make.conf <<EOF
-CHOST="i686-pc-linux-gnu"
-CFLAGS="-O2 -march=athlon-xp -pipe"
+CHOST="x86_64-pc-linux-gnu"
+CFLAGS="-O2 -march=native -pipe"
 CXXFLAGS="\${CFLAGS}"
 USE="-X -gtk -gnome -kde -qt"
 EOF
 
-  echo "portdbapi.auxdbmodule = cache.metadata_overlay.database" > ${chroot_dir}/etc/portage/modules
 }
