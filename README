@@ -2,16 +2,21 @@ Quickstart - Installer for automated Gentoo deployments.
 
 Originally written by Andrew Gaffney
 All Credits go to him here:
-http://agaffney.org/quickstart.php
+https://github.com/agaffney/quickstart
 
 Forked here on github so I could implement my patches in an open forum thanks to GPLv2 (/doc/README).
 
+Another fork called Kicktoo can be found here, buit as of late 2018, it was also broken: https://github.com/r1k0/kicktoo
+
+The changes I made here were issued in a PR to Andrew, which he didn't merge nor did he fix himself, so I guess I'll work work off of my own repo to get this working!
+
 -----
 
-Fixes/features thus far that are not upstream:
+Fixes:
 
 Features:
 -Support for percentages when creating logical volumes (100%FREE)
+-Support for grub2
 
 Fixes:
 -Builds kernel/initrd and sets up grub after all packages installed. Current upstream builds
