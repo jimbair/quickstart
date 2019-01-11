@@ -16,8 +16,10 @@ Fixes:
 
 Features:
 -Support for percentages when creating logical volumes (100%FREE)
--Support for grub2
 
 Fixes:
 -Builds kernel/initrd and sets up grub after all packages installed. Current upstream builds
  packages after the initrd, causing lvm2 utils to be missing/system cannot boot.
+
+In progress:
+-Support for grub2
